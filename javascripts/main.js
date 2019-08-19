@@ -44,20 +44,26 @@ function searchMovie (keyword) {
 
 function showMovie(data) {
 	console.log(data);
+	const imgHeader = "https://image.tmdb.org/t/p/";
+	var imgSize = "w342/";
 	// passo tutti i film trovati
 	for (var i = 0; i < data.total_results; i++) {
 		//preaparo bandiera e stelline
 		language = flagGenerator(data.results[i].original_language);
 		stars = starsGenerator(data.results[i].vote_average);
+		//preparo il link con l'immagine di copertina
+		var img = imgHeader + imgSize + data.results[i].poster_path;
 		//visualizzo il titolo originale solo se è diverso dall'altro
 		if (data.results[i].title === data.results[i].original_title) {
 			context = {
+				poster: img,
 				title: data.results[i].title,
 				lang: language,
 				vote: stars
 			};
 		} else {
 			context = {
+				poster: img,
 				title: data.results[i].title,
 				originalTitle: "(" + data.results[i].original_title + ")",
 				lang: language,
@@ -65,33 +71,6 @@ function showMovie(data) {
 			};
 		}
 		// visualizzo il film nella pagina
-		$("#results").append(template(context));
-	}
-}
-
-function showTV(data) {
-	console.log(data);
-	// passo tutti le serie TV trovate
-	for (var i = 0; i < data.total_results; i++) {
-		//preaparo bandiera e stelline
-		language = flagGenerator(data.results[i].original_language);
-		stars = starsGenerator(data.results[i].vote_average);
-		//visualizzo il titolo originale solo se è diverso dall'altro
-		if (data.results[i].name === data.results[i].original_name) {
-			context = {
-				title: data.results[i].name,
-				lang: language,
-				vote: stars
-			};
-		} else {
-			context = {
-				title: data.results[i].name,
-				originalTitle: "(" + data.results[i].original_name + ")",
-				lang: language,
-				vote: stars
-			};
-		}
-		// visualizzo la serie TV nella pagina
 		$("#results").append(template(context));
 	}
 }
@@ -114,6 +93,39 @@ function searchTV (keyword) {
 			alert("E' avvenuto un errore. "+errore);
 		}
 	});
+}
+
+function showTV(data) {
+	console.log(data);
+	const imgHeader = "https://image.tmdb.org/t/p/";
+	var imgSize = "w342/";
+	// passo tutti le serie TV trovate
+	for (var i = 0; i < data.total_results; i++) {
+		//preaparo bandiera e stelline
+		language = flagGenerator(data.results[i].original_language);
+		stars = starsGenerator(data.results[i].vote_average);
+		//preparo il link con l'immagine di copertina
+		var img = imgHeader + imgSize + data.results[i].poster_path;
+		//visualizzo il titolo originale solo se è diverso dall'altro
+		if (data.results[i].name === data.results[i].original_name) {
+			context = {
+				poster: img,
+				title: data.results[i].name,
+				lang: language,
+				vote: stars
+			};
+		} else {
+			context = {
+				poster: img,
+				title: data.results[i].name,
+				originalTitle: "(" + data.results[i].original_name + ")",
+				lang: language,
+				vote: stars
+			};
+		}
+		// visualizzo la serie TV nella pagina
+		$("#results").append(template(context));
+	}
 }
 
 function starsGenerator(vote) {
@@ -145,7 +157,7 @@ function flagGenerator(code) {
 			flag = flag + 'fr.ico" alt="français">';
 			break;
 		case "hi":
-			flag = flag + 'hi.ico" alt="hindian">';
+			flag = flag + 'hi.ico" alt="hindi">';
 			break;
 		case "it":
 			flag = flag + 'it.ico" alt="italiano">';
