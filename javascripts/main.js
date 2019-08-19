@@ -1,7 +1,7 @@
 //init template aggiunta film dei risultati con Handlebars.js
 var source   = document.getElementById("movie-template").innerHTML;
 var template = Handlebars.compile(source);
-var content, html;
+var content;
 
 $(document).ready(function() {
 	//AVVIO RICERCA
@@ -41,18 +41,76 @@ function searchMovie (keyword) {
 }
 
 function showResult(data) {
+	console.log(data);
 	// passo tutti i film trovati
-	for (var i = 0; i < data.total_results; i++) {
-		// prelevo i dati che mi servono
-		context = {
-			title: data.results[i].title,
-			originalTitle: data.results[i].original_title,
-			lang: data.results[i].original_language,
-			vote: data.results[i].vote_average
-		};
-		// li "complilo" nel template
-		html = template(context);
+	for (var i = 0; i < data.total_results - 1; i++) {
+		//preaparo bandiera e stelline
+		language = flagGenerator(data.results[i].original_language);
+		stars = starsGenerator(data.results[i].vote_average);
+		//visualizzo il titolo originale solo se è diverso dall'altro
+		if (data.results[i].title === data.results[i].original_title) {
+			context = {
+				title: data.results[i].title,
+				lang: language,
+				vote: stars
+			};
+		} else {
+			context = {
+				title: data.results[i].title,
+				originalTitle: "(" + data.results[i].original_title + ")",
+				lang: language,
+				vote: stars
+			};
+		}
 		// visualizzo il film nella pagina
-		$("#results").append(html);
+		$("#results").append(template(context));
+	}
+
+	function starsGenerator(vote) {
+		if(vote === 0) {
+			return "Il film non è stato valutato."
+		} else {
+			var stars = "";
+			vote = Math.ceil(vote / 2);
+			for (var i = 0; i < vote; i++) {
+				stars += '<i class="fas fa-star"></i>';
+			}
+			return stars;
+		}
+	}
+	function flagGenerator(code) {
+		var flag = '<img src="resources/flags/';
+		switch (code) {
+			case "de":
+				flag = flag + 'de.ico" alt="deutsch">';
+				break;
+			case "en":
+				flag = flag + 'en.ico" alt="english">';
+				break;
+			case "es":
+				flag = flag + 'es.ico" alt="espanol">';
+				break;
+			case "fr":
+				flag = flag + 'fr.ico" alt="français">';
+				break;
+			case "hi":
+				flag = flag + 'hi.ico" alt="hindian">';
+				break;
+			case "it":
+				flag = flag + 'it.ico" alt="italiano">';
+				break;
+			case "pt":
+				flag = flag + 'pt.ico" alt="português">';
+				break;
+			case "ru":
+				flag = flag + 'ru.ico" alt="русский">';
+				break;
+			case "zh":
+				flag = flag + 'zh.ico" alt="普通话">';
+				break;
+			default:
+				return code;
+		}
+		return flag;
 	}
 }

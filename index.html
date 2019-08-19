@@ -7,6 +7,7 @@
 	<link rel="stylesheet" ype="text/css"  href="style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://kit.fontawesome.com/bc10cdad61.js"></script>
 </head>
 <body>
 	<input type="text" id="input" name="input" placeholder="Inserisci il titolo del film">
@@ -15,13 +16,11 @@
 	<!-- Template aggiunta film ai risultati -->
 	<script type="text/x-handlebars-template" id="movie-template">
 	    <div class="movie">
-	        <h1 class="movie__title">{{title}}</h1>
-	        <h5 class="movie__originalTitle">{{originalTitle}}</h5>
-	        <p class="movie__lang">{{lang}}</p>
-	        <p class="movie__vote">{{vote}}</p>
+	        <h1 class="movie__title">{{title}} <span class="movie__originalTitle">{{originalTitle}}</span></h1>
+	        <p class="movie__lang">Lingua: {{{lang}}}</p>
+	        <p class="movie__vote">Voto: {{{vote}}}</p>
 	    </div>
 	</script>
 	<script type="text/javascript" src="javascripts/main.js"></script>
 </body>
 </html>
-

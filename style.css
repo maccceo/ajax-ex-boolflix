@@ -3,3 +3,11 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+
+.movie {
+	margin: 40px 0;
+}
+
+.movie__lang img {
+	height: 15px;
+}
