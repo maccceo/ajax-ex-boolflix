@@ -68,10 +68,20 @@ header {
 .movie__poster {
 	height: 100%;
 	transition: filter 0.2s ease;
+	background-color: red;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .movie__poster img {
 	width: 100%;
+}
+
+.movie__bigTitle {
+	font-size: 41px;
+    font-weight: bold;
+    color: white;
 }
 
 .movie__info {
@@ -79,7 +89,7 @@ header {
 	position: absolute;
 	top: 0;
 	padding: 20px;
-	color: grey;
+	color: white;
 	width: 100%;
 	height: 100%;
 }

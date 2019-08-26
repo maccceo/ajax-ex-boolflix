@@ -77,19 +77,6 @@ function print(type, data) {
 	// passo tutti i film trovati
 	for (var i = 0; i < data.length; i++) {
 
-		//inizializzo poster (se c'è)
-		if (data[i].poster_path === null) {
-			var img = data[i].title;
-		} else {
-			var img = '<img src="https://image.tmdb.org/t/p/w342/' + data[i].poster_path + '" alt="copertina">';
-		}
-
-		//inizializzo trama (se c'è)
-		var overview = "";
-		if (data[i].overview.length > 0) {
-			overview = "Trama: " + data[i].overview;
-		}
-
 		//setto titolo e titolo originale (l'API movie lo chiama diversamente dall'API tv)
 		var title = "";
 		var originalTitle = "";
@@ -108,6 +95,20 @@ function print(type, data) {
 			originalTitle = "(" + originalTitle + ")";
 		}
 
+		//inizializzo poster (se c'è)
+		if (data[i].poster_path === null) {
+			var img = "<p class='movie__bigTitle'>" + title + "</p>";
+			console.log(img);
+		} else {
+			var img = '<img src="https://image.tmdb.org/t/p/w342/' + data[i].poster_path + '" alt="copertina">';
+		}
+
+		//inizializzo trama (se c'è)
+		var overview = "";
+		if (data[i].overview.length > 0) {
+			overview = "Trama: " + data[i].overview;
+		}
+
 		context = {
 			poster: img,
 			title: title,
@@ -119,6 +120,8 @@ function print(type, data) {
 	
 		// visualizzo il film nella pagina
 		results.append(template(context));
+
+		// $(".movie__poster").parent().addClass("movie__bigTitleBg");
 	}
 }
 
