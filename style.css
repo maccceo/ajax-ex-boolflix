@@ -2,12 +2,112 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: 'Livvic', sans-serif;
+}
+
+@font-face {
+  font-family: titolo;
+  src: url(resources/fonts/BebasNeue.otf);
+}
+
+#main-container {
+	width: 100vw;
+}
+
+header {
+	height: 60px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px 30px;
+	background-color: black;
+}
+
+#header-left a {
+	color: red;
+	font-family: titolo;
+	text-transform: uppercase;
+	cursor: pointer;
+	letter-spacing: 5px;
+	text-decoration: none;
+	font-size: 30px;
+}
+
+#header-right i {
+	color: grey;
+	cursor: pointer;
+}
+
+#header-right input {
+	color: lightgrey;
+    border: 0;
+    background-color: transparent;
+    line-height: 30px;
+	margin-right: 5px;
+}
+
+#header-right input:focus {
+	outline: none;
+}
+
+#results {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+	padding: 40px;
+	flex: 1 1 auto;
 }
 
 .movie {
-	margin: 30px 0;
+	width: 300px;
+	height: 450px;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.movie__poster {
+	height: 100%;
+	transition: filter 0.2s ease;
+}
+
+.movie__poster img {
+	width: 100%;
+}
+
+.movie__info {
+	display: none;
+	position: absolute;
+	top: 0;
+	padding: 20px;
+	color: grey;
+	width: 100%;
+	height: 100%;
+}
+
+.movie:hover .movie__poster {
+	filter: grayscale(100%) brightness(30%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8) blur(2px);
+}
+
+.movie:hover .movie__info {
+	display: block;
+}
+
+.movie__title {
+	text-align: center;
+	margin: 10px 0;
+
+}
+
+.movie__originalTitle {
+	display: block;
+	font-size: 17px;
+}
+
+.fa-star {
+	color: gold;
+	margin-right: 2px;
 }
 
 .movie__lang img {
-	height: 15px;
+	height: 12px;
 }

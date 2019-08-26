@@ -7,12 +7,14 @@ $(document).ready(function() {
 	//AVVIO RICERCA
 	//al click di Vai
 	$("#vai").click(function() {
+		//passo contenuto Searchbar
 		searchMovie($("#input").val());
 		searchTV($("#input").val());
 	});
-	//alla pressione di invio
+	//alla pressione di invio (se l'utente ha scritto qualcosa)
 	$("#input").keyup(function(event) {
 		if (event.which == 13 && $("#input").val().length > 0) {
+			//passo contenuto Searchbar
 			searchMovie($("#input").val());
 			searchTV($("#input").val());
 		}
@@ -23,15 +25,17 @@ $(document).ready(function() {
 
 
 function searchMovie (keyword) {
-	//preparo url API con stringa da cercare
-	var url = "https://api.themoviedb.org/3/search/movie?api_key=2728da4b07bc915efd24213fdc2a734&language=it_IT&query=" + keyword;
-
 	$.ajax({
-		url : url,
+		url : "https://api.themoviedb.org/3/search/movie",
 		method : "GET",
+		data: {
+		  api_key: "2728da4b07bc915efd24213fdc2a734",
+		  language: "it-IT",
+		  query: keyword
+		},
 		success : function (data,stato) {
 			if (stato == "success") {
-				showMovie(data);
+				print("movies", data.results);
 			} else {
 			console.log("Problemi con l'API; " + stato);
 			}
@@ -40,51 +44,20 @@ function searchMovie (keyword) {
 			alert("E' avvenuto un errore. "+errore);
 		}
 	});
-}
-
-function showMovie(data) {
-	console.log(data);
-	const imgHeader = "https://image.tmdb.org/t/p/";
-	var imgSize = "w342/";
-	// passo tutti i film trovati
-	for (var i = 0; i < data.total_results; i++) {
-		//preaparo bandiera e stelline
-		language = flagGenerator(data.results[i].original_language);
-		stars = starsGenerator(data.results[i].vote_average);
-		//preparo il link con l'immagine di copertina
-		var img = imgHeader + imgSize + data.results[i].poster_path;
-		//visualizzo il titolo originale solo se è diverso dall'altro
-		if (data.results[i].title === data.results[i].original_title) {
-			context = {
-				poster: img,
-				title: data.results[i].title,
-				lang: language,
-				vote: stars
-			};
-		} else {
-			context = {
-				poster: img,
-				title: data.results[i].title,
-				originalTitle: "(" + data.results[i].original_title + ")",
-				lang: language,
-				vote: stars
-			};
-		}
-		// visualizzo il film nella pagina
-		$("#results").append(template(context));
-	}
 }
 
 function searchTV (keyword) {
-	//preparo url API con stringa da cercare
-	var url = "https://api.themoviedb.org/3/search/tv?api_key=2728da4b07bc915efd24213fdc2a734&language=it_IT&query=" + keyword;
-
 	$.ajax({
-		url : url,
+		url : "https://api.themoviedb.org/3/search/tv",
 		method : "GET",
+		data: {
+		  api_key: "2728da4b07bc915efd24213fdc2a734",
+		  language: "it-IT",
+		  query: keyword
+		},
 		success : function (data,stato) {
 			if (stato == "success") {
-				showTV(data);
+				print("tv", data.results);
 			} else {
 			console.log("Problemi con l'API; " + stato);
 			}
@@ -95,87 +68,98 @@ function searchTV (keyword) {
 	});
 }
 
-function showTV(data) {
+function print(type, data) {
 	console.log(data);
-	const imgHeader = "https://image.tmdb.org/t/p/";
-	var imgSize = "w342/";
-	// passo tutti le serie TV trovate
-	for (var i = 0; i < data.total_results; i++) {
-		//preaparo bandiera e stelline
-		language = flagGenerator(data.results[i].original_language);
-		stars = starsGenerator(data.results[i].vote_average);
-		//preparo il link con l'immagine di copertina
-		var img = imgHeader + imgSize + data.results[i].poster_path;
-		//visualizzo il titolo originale solo se è diverso dall'altro
-		if (data.results[i].name === data.results[i].original_name) {
-			context = {
-				poster: img,
-				title: data.results[i].name,
-				lang: language,
-				vote: stars
-			};
+
+	// elemento HTML che popolo con i dati recuperati dall'API
+	var results = $("#results");
+
+	// passo tutti i film trovati
+	for (var i = 0; i < data.length; i++) {
+
+		//inizializzo poster (se c'è)
+		if (data[i].poster_path === null) {
+			var img = data[i].title;
 		} else {
-			context = {
-				poster: img,
-				title: data.results[i].name,
-				originalTitle: "(" + data.results[i].original_name + ")",
-				lang: language,
-				vote: stars
-			};
+			var img = '<img src="https://image.tmdb.org/t/p/w342/' + data[i].poster_path + '" alt="copertina">';
 		}
-		// visualizzo la serie TV nella pagina
-		$("#results").append(template(context));
+
+		//inizializzo trama (se c'è)
+		var overview = "";
+		if (data[i].overview.length > 0) {
+			overview = "Trama: " + data[i].overview;
+		}
+
+		//setto titolo e titolo originale (l'API movie lo chiama diversamente dall'API tv)
+		var title = "";
+		var originalTitle = "";
+		if (type == "movies") {
+			title = data[i].title;
+			originalTitle = data[i].original_title;
+		} else {
+			title = data[i].name;
+			originalTitle = data[i].original_name;
+		}
+
+		//nascondo il titolo originale se è uguale al titolo
+		if (title === originalTitle) {
+			originalTitle = "";
+		} else {
+			originalTitle = "(" + originalTitle + ")";
+		}
+
+		context = {
+			poster: img,
+			title: title,
+			originalTitle: originalTitle,
+			lang: flagGenerator(data[i].original_language),
+			vote: starsGenerator(data[i].vote_average),
+			overview: overview
+		}
+	
+		// visualizzo il film nella pagina
+		results.append(template(context));
 	}
 }
 
+
+
 function starsGenerator(vote) {
-	if(vote === 0) {
-		return "Il film non è stato valutato."
+	if (vote === 0) {
+		return "Il film non è stato valutato.";
 	} else {
-		var stars = "";
 		vote = Math.ceil(vote / 2);
-		for (var i = 0; i < vote; i++) {
-			stars += '<i class="fas fa-star"></i>';
+		var stars = "";
+		for (var i = 0; i < 5; i++) {
+			if (i < vote) {
+				stars += '<i class="fas fa-star"></i>';
+			} else {
+				stars += '<i class="far fa-star"></i>';
+			}
 		}
 		return stars;
 	}
 }
 
-function flagGenerator(code) {
-	var flag = '<img src="resources/flags/';
-	switch (code) {
-		case "de":
-			flag = flag + 'de.ico" alt="deutsch">';
-			break;
-		case "en":
-			flag = flag + 'en.ico" alt="english">';
-			break;
-		case "es":
-			flag = flag + 'es.ico" alt="espanol">';
-			break;
-		case "fr":
-			flag = flag + 'fr.ico" alt="français">';
-			break;
-		case "hi":
-			flag = flag + 'hi.ico" alt="hindi">';
-			break;
-		case "it":
-			flag = flag + 'it.ico" alt="italiano">';
-			break;
-		case "ja":
-			flag = flag + 'ja.ico" alt="japan">';
-			break;
-		case "pt":
-			flag = flag + 'pt.ico" alt="português">';
-			break;
-		case "ru":
-			flag = flag + 'ru.ico" alt="русский">';
-			break;
-		case "zh":
-			flag = flag + 'zh.ico" alt="普通话">';
-			break;
-		default:
-			return code;
+function flagGenerator(lang) {
+	var availableFlag = [
+	  "it",
+	  "en",
+	  "de",
+	  "es",
+	  "fr",
+	  "hi",
+	  "ja",
+	  "pt",
+	  "ru",
+	  "zh"
+	];
+	var flag = "";
+
+	if (availableFlag.includes(lang)) {
+		flag = "<img src='resources/flags/" + lang + ".ico'>";
+	} else {
+		flag = lang;
 	}
 	return flag;
 }

@@ -4,22 +4,43 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Boolfix</title>
+	<link rel="icon" href="resources/icons/netflix-logo.png">
 	<link rel="stylesheet" ype="text/css"  href="style.css">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://kit.fontawesome.com/bc10cdad61.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Livvic&display=swap" rel="stylesheet">
 </head>
 <body>
-	<input type="text" id="input" name="input" placeholder="Inserisci il titolo del film">
-	<button id="vai">Vai</button>
-	<ul id="results"></ul>
+	<div id="main-container">
+		<header>
+			<div id="header-left">
+				<a href="#" title="Boolfix">Boolfix</a>
+			</div>
+			<div id="header-right">
+				<input type="text" id="input" name="input" placeholder="Cerca">
+				<i id="vai" class="fas fa-search"></i>
+			</div>
+		</header>
+		<section id="results">
+		</section>
+	</div>
+	
 	<!-- Template aggiunta film ai risultati -->
 	<script type="text/x-handlebars-template" id="movie-template">
 	    <div class="movie">
-	    	<img src="{{{poster}}}" alt="copertina">
-	        <h1 class="movie__title">{{title}} <span class="movie__originalTitle">{{originalTitle}}</span></h1>
-	        <p class="movie__lang">Lingua: {{{lang}}}</p>
-	        <p class="movie__vote">Voto: {{{vote}}}</p>
+	    	<div class="movie__poster">
+	    		{{{poster}}}
+	    	</div>
+	    	<div class="movie__info">
+		        <h1 class="movie__title">
+		        	{{title}}
+		        	<span class="movie__originalTitle">{{originalTitle}}</span>
+		        </h1>
+		        <p class="movie__lang">Lingua: {{{lang}}}</p>
+		        <p class="movie__vote">Voto: {{{vote}}}</p>
+		        <p class="movie__overview">{{overview}}</p>
+		    </div>
 	    </div>
 	</script>
 	<script type="text/javascript" src="javascripts/main.js"></script>
