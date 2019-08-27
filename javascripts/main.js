@@ -107,6 +107,8 @@ function print(type, data) {
 			console.log(img);
 		} else {
 			var img = '<img src="https://image.tmdb.org/t/p/w342/' + data[i].poster_path + '" alt="copertina">';
+			// tolgo sfondo default per necessità css
+			bg = "";
 		}
 
 		//inizializzo trama (se c'è)

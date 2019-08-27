@@ -102,6 +102,18 @@ header {
 	background-size: contain;
 }
 
+.movie--tvbg:hover {
+	color: red;
+	background-image: url("resources/images/tv-bg-hover.jpg");
+	background-size: contain;
+}
+
+.movie--cinemabg:hover {
+	color: red;
+	background-image: url("resources/images/cinema-bg-hover.jpg");
+	background-size: contain;
+}
+
 .movie__poster {
 	height: 100%;
 	width: 100%;
@@ -147,9 +159,7 @@ header {
 	margin: 5px 0;
 }
 
-/*.movie:hover .movie__poster {
-	filter: brightness(20%);
-}*/
+
 
 .movie:hover .movie__poster>img {
 	filter: grayscale(100%) brightness(20%) sepia(100%) hue-rotate(-50deg) saturate(600%) contrast(0.8) blur(1px);
