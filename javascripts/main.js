@@ -29,19 +29,19 @@ function searchMovie (keyword) {
 		url : "https://api.themoviedb.org/3/search/movie",
 		method : "GET",
 		data: {
-		  api_key: "2728da4b07bc915efd24213fdc2a734",
+		  api_key: "2728da4b07bc915efd24213fdc2a734c",
 		  language: "it-IT",
 		  query: keyword
 		},
 		success : function (data,stato) {
 			if (stato == "success") {
-				print("movies", data.results);
+				print("movie", data.results);
 			} else {
 			console.log("Problemi con l'API; " + stato);
 			}
 		},
 		error : function (richiesta,stato,errori) {
-			alert("E' avvenuto un errore. "+errore);
+			alert("E' avvenuto un errore. "+errori);
 		}
 	});
 }
@@ -51,7 +51,7 @@ function searchTV (keyword) {
 		url : "https://api.themoviedb.org/3/search/tv",
 		method : "GET",
 		data: {
-		  api_key: "2728da4b07bc915efd24213fdc2a734",
+		  api_key: "2728da4b07bc915efd24213fdc2a734c",
 		  language: "it-IT",
 		  query: keyword
 		},
@@ -63,7 +63,7 @@ function searchTV (keyword) {
 			}
 		},
 		error : function (richiesta,stato,errori) {
-			alert("E' avvenuto un errore. "+errore);
+			alert("E' avvenuto un errore. "+errori);
 		}
 	});
 }
@@ -77,12 +77,16 @@ function print(type, data) {
 	// passo tutti i film trovati
 	for (var i = 0; i < data.length; i++) {
 
+		//prendo i primi 5 attori comunicati dall'API
+		var actors = getActors(data[i],type);
+		console.log("Perchè qua non ho niente? " + actors);
+
 		//setto titolo e titolo originale (l'API movie lo chiama diversamente dall'API tv)
 		var title = "";
 		var originalTitle = "";
 		var contentType = "";
 		var bg = "";
-		if (type == "movies") {
+		if (type == "movie") {
 			title = data[i].title;
 			originalTitle = data[i].original_title;
 			contentType = "Film"; 
@@ -104,7 +108,6 @@ function print(type, data) {
 		//inizializzo poster (se c'è)
 		if (data[i].poster_path === null) {
 			var img = "<p class='movie__bigTitle'>" + title + "</p>";
-			console.log(img);
 		} else {
 			var img = '<img src="https://image.tmdb.org/t/p/w342/' + data[i].poster_path + '" alt="copertina">';
 			// tolgo sfondo default per necessità css
@@ -135,7 +138,33 @@ function print(type, data) {
 	}
 }
 
-
+function getActors(movie,type) {
+	$.ajax({
+		url : "https://api.themoviedb.org/3/" + type + "/" + movie.id + "/credits",
+		method : "GET",
+		data: {
+		  api_key: "2728da4b07bc915efd24213fdc2a734c"
+		},
+		success : function (data,stato) {
+			if (stato == "success") {
+				// primi 5 attori del cast (oggetto completo con parametri inutili)
+				var rawCast = data.cast.slice(0,5);
+				// estraggo solo i nomi degli attori e li pusho in un array
+				var actors = [];
+				for (var key in rawCast) {
+					actors.push(rawCast[key].name);
+				}
+				console.log("Ho trovato i seguenti attori: " + actors);
+				return actors;
+			} else {
+				console.log("Problemi con l'API; " + stato);
+			}
+		},
+		error : function (richiesta,stato,errori) {
+			console.log("errore");
+		}
+	});
+}
 
 function starsGenerator(vote) {
 	if (vote === 0) {
