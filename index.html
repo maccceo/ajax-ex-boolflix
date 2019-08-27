@@ -28,7 +28,7 @@
 	
 	<!-- Template aggiunta film ai risultati -->
 	<script type="text/x-handlebars-template" id="movie-template">
-	    <div class="movie">
+	    <div class="movie {{bg}}">
 	    	<div class="movie__poster">
 	    		{{{poster}}}
 	    	</div>
@@ -37,9 +37,10 @@
 		        	{{title}}
 		        	<span class="movie__originalTitle">{{originalTitle}}</span>
 		        </h1>
-		        <p class="movie__lang">Lingua: {{{lang}}}</p>
-		        <p class="movie__vote">Voto: {{{vote}}}</p>
-		        <p class="movie__overview">{{overview}}</p>
+		        <p class="movie__type"><strong>Tipo:</strong> {{type}}</p>
+		        <p class="movie__lang"><strong>Lingua:</strong> {{{lang}}}</p>
+		        <p class="movie__vote"><strong>Voto:</strong> {{{vote}}}</p>
+		        <p class="movie__overview">{{{overview}}}</p>
 		    </div>
 	    </div>
 	</script>

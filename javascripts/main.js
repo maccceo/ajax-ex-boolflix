@@ -80,12 +80,18 @@ function print(type, data) {
 		//setto titolo e titolo originale (l'API movie lo chiama diversamente dall'API tv)
 		var title = "";
 		var originalTitle = "";
+		var contentType = "";
+		var bg = "";
 		if (type == "movies") {
 			title = data[i].title;
 			originalTitle = data[i].original_title;
+			contentType = "Film"; 
+			bg = "movie--cinemabg";
 		} else {
 			title = data[i].name;
 			originalTitle = data[i].original_name;
+			contentType = "Serie Tv";
+			bg = "movie--tvbg";
 		}
 
 		//nascondo il titolo originale se è uguale al titolo
@@ -106,11 +112,13 @@ function print(type, data) {
 		//inizializzo trama (se c'è)
 		var overview = "";
 		if (data[i].overview.length > 0) {
-			overview = "Trama: " + data[i].overview;
+			overview = "<strong>Trama:</strong> " + data[i].overview;
 		}
 
 		context = {
+			bg: bg,
 			poster: img,
+			type: contentType,
 			title: title,
 			originalTitle: originalTitle,
 			lang: flagGenerator(data[i].original_language),
